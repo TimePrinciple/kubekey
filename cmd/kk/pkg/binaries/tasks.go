@@ -49,6 +49,8 @@ func (d *Download) Execute(runtime connector.Runtime) error {
 			archMap["amd64"] = true
 		case "arm64":
 			archMap["arm64"] = true
+		case "riscv64":
+			archMap["riscv64"] = true
 		default:
 			return errors.New(fmt.Sprintf("Unsupported architecture: %s", host.Arch))
 		}
@@ -307,3 +309,5 @@ func (d *CriDownload) Execute(runtime connector.Runtime) error {
 	}
 	return nil
 }
+
+

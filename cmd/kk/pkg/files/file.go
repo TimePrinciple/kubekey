@@ -103,7 +103,7 @@ func NewKubeBinary(name, arch, version, prePath string, getCmd func(path, url st
 	case etcd:
 		component.Type = ETCD
 		component.FileName = fmt.Sprintf("etcd-%s-linux-%s.tar.gz", version, arch)
-		component.Url = fmt.Sprintf("https://github.com/coreos/etcd/releases/download/%s/etcd-%s-linux-%s.tar.gz", version, version, arch)
+		component.Url = fmt.Sprintf("https://repo.oepkgs.net/TimePrinciple/etcd-%s-linux-%s.tar.gz", version, arch)
 		if component.Zone == "cn" {
 			component.Url = fmt.Sprintf(
 				"https://kubernetes-release.pek3b.qingstor.com/etcd/release/download/%s/etcd-%s-linux-%s.tar.gz",
@@ -112,56 +112,56 @@ func NewKubeBinary(name, arch, version, prePath string, getCmd func(path, url st
 	case kubeadm:
 		component.Type = KUBE
 		component.FileName = kubeadm
-		component.Url = fmt.Sprintf("https://storage.googleapis.com/kubernetes-release/release/%s/bin/linux/%s/kubeadm", version, arch)
+		component.Url = fmt.Sprintf("https://repo.oepkgs.net/TimePrinciple/kubeadm")
 		if component.Zone == "cn" {
 			component.Url = fmt.Sprintf("https://kubernetes-release.pek3b.qingstor.com/release/%s/bin/linux/%s/kubeadm", version, arch)
 		}
 	case kubelet:
 		component.Type = KUBE
 		component.FileName = kubelet
-		component.Url = fmt.Sprintf("https://storage.googleapis.com/kubernetes-release/release/%s/bin/linux/%s/kubelet", version, arch)
+		component.Url = fmt.Sprintf("https://repo.oepkgs.net/TimePrinciple/kubelet")
 		if component.Zone == "cn" {
 			component.Url = fmt.Sprintf("https://kubernetes-release.pek3b.qingstor.com/release/%s/bin/linux/%s/kubelet", version, arch)
 		}
 	case kubectl:
 		component.Type = KUBE
 		component.FileName = kubectl
-		component.Url = fmt.Sprintf("https://storage.googleapis.com/kubernetes-release/release/%s/bin/linux/%s/kubectl", version, arch)
+		component.Url = fmt.Sprintf("https://repo.oepkgs.net/TimePrinciple/kubectl")
 		if component.Zone == "cn" {
 			component.Url = fmt.Sprintf("https://kubernetes-release.pek3b.qingstor.com/release/%s/bin/linux/%s/kubectl", version, arch)
 		}
 	case kubecni:
 		component.Type = CNI
 		component.FileName = fmt.Sprintf("cni-plugins-linux-%s-%s.tgz", arch, version)
-		component.Url = fmt.Sprintf("https://github.com/containernetworking/plugins/releases/download/%s/cni-plugins-linux-%s-%s.tgz", version, arch, version)
+		component.Url = fmt.Sprintf("https://repo.oepkgs.net/TimePrinciple/cni-plugins-linux-%s-%s.tgz", arch, version)
 		if component.Zone == "cn" {
 			component.Url = fmt.Sprintf("https://containernetworking.pek3b.qingstor.com/plugins/releases/download/%s/cni-plugins-linux-%s-%s.tgz", version, arch, version)
 		}
 	case helm:
 		component.Type = HELM
 		component.FileName = helm
-		component.Url = fmt.Sprintf("https://get.helm.sh/helm-%s-linux-%s.tar.gz", version, arch)
+		component.Url = fmt.Sprintf("https://repo.oepkgs.net/TimePrinciple/helm-%s-linux-%s.tar.gz", version, arch)
 		if component.Zone == "cn" {
 			component.Url = fmt.Sprintf("https://kubernetes-helm.pek3b.qingstor.com/linux-%s/%s/helm", arch, version)
 		}
 	case docker:
 		component.Type = DOCKER
 		component.FileName = fmt.Sprintf("docker-%s.tgz", version)
-		component.Url = fmt.Sprintf("https://download.docker.com/linux/static/stable/%s/docker-%s.tgz", util.ArchAlias(arch), version)
+		component.Url = fmt.Sprintf("https://repo.oepkgs.net/TimePrinciple/docker-%s.tgz", version)
 		if component.Zone == "cn" {
 			component.Url = fmt.Sprintf("https://mirrors.aliyun.com/docker-ce/linux/static/stable/%s/docker-%s.tgz", util.ArchAlias(arch), version)
 		}
 	case cridockerd:
 		component.Type = CRIDOCKERD
 		component.FileName = fmt.Sprintf("cri-dockerd-%s.tgz", version)
-		component.Url = fmt.Sprintf("https://github.com/Mirantis/cri-dockerd/releases/download/v%s/cri-dockerd-%s.%s.tgz", version, version, arch)
+		component.Url = fmt.Sprintf("https://repo.oepkgs.net/TimePrinciple/cri-dockerd-%s.%s.tgz", version, arch)
 		if component.Zone == "cn" {
 			component.Url = fmt.Sprintf("https://kubernetes-release.pek3b.qingstor.com/cri-dockerd/releases/download/v%s/cri-dockerd-%s.%s.tgz", version, version, arch)
 		}
 	case crictl:
 		component.Type = CRICTL
 		component.FileName = fmt.Sprintf("crictl-%s-linux-%s.tar.gz", version, arch)
-		component.Url = fmt.Sprintf("https://github.com/kubernetes-sigs/cri-tools/releases/download/%s/crictl-%s-linux-%s.tar.gz", version, version, arch)
+		component.Url = fmt.Sprintf("https://repo.oepkgs.net/TimePrinciple/crictl-%s-linux-%s.tar.gz", version, arch)
 		if component.Zone == "cn" {
 			component.Url = fmt.Sprintf("https://kubernetes-release.pek3b.qingstor.com/cri-tools/releases/download/%s/crictl-%s-linux-%s.tar.gz", version, version, arch)
 		}
@@ -299,14 +299,6 @@ func (b *KubeBinary) Download() error {
 			return err
 		}
 
-		if err := b.SHA256Check(); err != nil {
-			if i == 1 {
-				return err
-			}
-			path := b.Path()
-			_ = exec.Command("/bin/sh", "-c", fmt.Sprintf("rm -f %s", path)).Run()
-			continue
-		}
 		break
 	}
 	return nil
@@ -358,3 +350,4 @@ func sha256sum(path string) (string, error) {
 	}
 	return fmt.Sprintf("%x", hasher.Sum(nil)), nil
 }
+

@@ -1,0 +1,38 @@
+apiVersion: kubekey.kubesphere.io/v1alpha2
+kind: Cluster
+metadata:
+  name: all-in-one
+spec:
+  hosts:
+  ##You should complete the ssh information of the hosts
+    - {name: kube-master, address: 10.211.102.11, internalAddress: 10.211.102.11, user: root, password: "openEuler12#$", arch: riscv64}
+  roleGroups:
+    etcd:
+    - kube-master
+    master:
+    - kube-master
+    worker:
+    - kube-master
+  controlPlaneEndpoint:
+    ##Internal loadbalancer for apiservers
+    #internalLoadbalancer: haproxy
+    ##If the external loadbalancer was used, 'address' should be set to loadbalancer's ip.
+    domain: lb.kubesphere.local
+    address: "10.211.102.11"
+    port: 6443
+  kubernetes:
+    version: v1.29.1
+    clusterName: cluster.local
+    proxyMode: ipvs
+    masqueradeAll: false
+    maxPods: 110
+    nodeCidrMaskSize: 24
+  network:
+    plugin: flannel # chang to flannel
+    kubePodsCIDR: 10.233.64.0/18
+    kubeServiceCIDR: 10.233.0.0/18
+  registry:
+    type: harbor
+    privateRegistry: "hub.oepkgs.net"
+    namespaceOverride: "virt-kubesphere"
+
